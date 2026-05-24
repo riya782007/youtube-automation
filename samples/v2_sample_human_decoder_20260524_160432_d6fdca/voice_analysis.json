@@ -1,0 +1,26 @@
+{
+  "language": "hinglish",
+  "tone": [
+    "mysterious",
+    "relatable",
+    "emotionally engaging"
+  ],
+  "pace_wpm": 165,
+  "total_seconds": 26.82,
+  "sentences": 11,
+  "words": 60,
+  "pauses_inserted": 12,
+  "breaths_inserted": 4,
+  "emphasis_words": [
+    "actually",
+    "instantly",
+    "matlab",
+    "suddenly",
+    "truth",
+    "vo",
+    "yeh"
+  ],
+  "tts_provider_target": "sarvam",
+  "natural_text_preview": "She stopped replying suddenly... Yeh actually kya matlab hai? Aapko lagta hai vo busy hai. Lekin truth different hai bro. Vo overthink kar rahi hai. Har message ka weight feel karti hai. Silence matlab tension, not boredom. But ek galti mos",
+  "notes": "Sample audio synthesized via offline pyttsx3 fallback; Sarvam (primary) or ElevenLabs (fallback) will produce the production-quality Hinglish voice when API keys are set."
+}

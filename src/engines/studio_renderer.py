@@ -92,33 +92,37 @@ class StudioRenderer:
         log.info("[studio] rendering %s | T=%.2fs | %dx%d @ %dfps",
                  video_id, T, self.W, self.H, self.fps)
 
-        # 1) Voice → wav (pyttsx3 fallback so we always get audio)
+        # 1) Voice → wav
         voice_path = self._synth_voice(voice_plan, work / "voice.wav", T)
 
         # 2) Music → wav, with intensity_curve modulation
         music_path = self._synth_music(music_plan, work / "music.wav", T)
 
-        # 3) SFX bed (heartbeat + sub-bass + loop sting from timeline events)
+        # 3) SFX bed
         sfx_path = self._synth_sfx(timeline, work / "sfx.wav", T)
 
-        # 4) Mix audio: voice (full) + music (ducked under voice) + sfx
+        # 4) Mix audio
         mix_path = self._mix_audio(voice_path, music_path, sfx_path,
                                    work / "audio_mix.wav", T)
 
-        # 5) Visual frame stream
+        # 5) Pre-fetch B-roll from Pexels per beat (real footage)
+        broll = self._fetch_broll(channel, timeline, work, T)
+
+        # 6) Visual frame stream
         frames_dir = work / "frames"
         if frames_dir.exists():
             shutil.rmtree(frames_dir)
         frames_dir.mkdir(parents=True)
         frame_count = self._paint_frames(timeline, channel, voice_plan,
-                                         characters_dir, frames_dir, T)
+                                         characters_dir, frames_dir, T,
+                                         broll=broll)
         log.info("[studio] painted %d frames", frame_count)
 
-        # 6) FFmpeg encode + audio mux
+        # 7) FFmpeg encode + audio mux
         out_mp4 = work / f"{video_id}.mp4"
         ok = self._encode(frames_dir, mix_path, out_mp4)
 
-        # 7) Thumbnail at the strongest "emotion" or "surprise" event
+        # 8) Thumbnail at the strongest emotional spike
         thumb_path = self._thumbnail(timeline, channel, frames_dir, work)
 
         return StudioRenderResult(
@@ -130,59 +134,272 @@ class StudioRenderer:
             skipped_reason=None if ok else "ffmpeg-encode-failed",
         )
 
+    # ---- B-roll (Pexels) -------------------------------------------------
+
+    @staticmethod
+    def _pexels_key() -> str:
+        return (os.environ.get("PEXELS_API_KEY")
+                or os.environ.get("pixels api key")
+                or "").strip()
+
+    def _fetch_broll(self, channel: dict[str, Any],
+                     timeline: dict[str, Any], work: Path, T: float) -> dict[str, Any]:
+        """Fetch one B-roll clip per beat. Returns {beat_name: frames_dir}.
+
+        Uses ffmpeg to pre-render each clip into a JPEG frame stream sized
+        to canvas, so the painter just reads `frame_<idx>.jpg` per timestamp.
+        """
+        key = self._pexels_key()
+        if not key:
+            log.info("[studio/broll] no Pexels key — skipping (Pillow gradient fallback)")
+            return {}
+        try:
+            import httpx
+        except Exception:
+            return {}
+
+        broll_dir = work / "broll"
+        broll_dir.mkdir(exist_ok=True)
+        per_beat: dict[str, dict[str, Any]] = {}
+
+        # Query plan per beat from script + channel category
+        title_seed = channel.get("topic_seeds", ["psychology"])[0]
+        beat_queries = {
+            "hook":       f"close up portrait phone screen anxious face",
+            "escalation": f"young woman thinking phone {title_seed}",
+            "reveal":     f"slow zoom face emotional reaction",
+            "twist":      f"surprised reaction phone notification",
+            "loop":       f"cinematic reflection city night thoughtful",
+        }
+
+        for beat_name, query in beat_queries.items():
+            try:
+                with httpx.Client(timeout=20.0) as c:
+                    r = c.get("https://api.pexels.com/videos/search",
+                              headers={"Authorization": key},
+                              params={"query": query, "per_page": 3,
+                                      "orientation": "portrait", "size": "medium"})
+                if r.status_code != 200:
+                    continue
+                videos = r.json().get("videos", [])
+                if not videos:
+                    continue
+                # Pick the first video with HD portrait
+                v = videos[0]
+                files = sorted(v.get("video_files", []),
+                               key=lambda f: f.get("height", 0), reverse=True)
+                best = next((f for f in files
+                             if 720 <= f.get("height", 0) <= 1920),
+                            files[0] if files else {})
+                url = best.get("link")
+                if not url:
+                    continue
+                src = broll_dir / f"{beat_name}.mp4"
+                # Download
+                with httpx.Client(timeout=120.0, follow_redirects=True) as c:
+                    rr = c.get(url)
+                    if rr.status_code != 200:
+                        continue
+                    src.write_bytes(rr.content)
+                # Pre-render into frame stream sized to canvas
+                bf_dir = broll_dir / f"{beat_name}_frames"
+                bf_dir.mkdir(exist_ok=True)
+                subprocess.run([
+                    self.ffmpeg, "-y", "-i", str(src),
+                    "-vf",
+                    f"scale={self.W}:{self.H}:force_original_aspect_ratio=increase,"
+                    f"crop={self.W}:{self.H},fps={self.fps}",
+                    "-q:v", "5",
+                    str(bf_dir / "f_%05d.jpg"),
+                ], capture_output=True, timeout=120)
+                count = len(list(bf_dir.glob("*.jpg")))
+                if count > 0:
+                    per_beat[beat_name] = {
+                        "frames_dir": bf_dir,
+                        "frame_count": count,
+                        "video_id": v.get("id"),
+                        "credit": v.get("user", {}).get("name"),
+                    }
+                    log.info("[studio/broll] %s: pexels#%s, %d frames (%s)",
+                             beat_name, v.get("id"), count, v.get("user", {}).get("name"))
+            except Exception as e:
+                log.warning("[studio/broll] %s failed: %s", beat_name, e)
+        return per_beat
+
     # ---- Voice synthesis ------------------------------------------------
 
     def _synth_voice(self, voice_plan: dict[str, Any], out: Path,
                      T: float) -> Path:
         """Synthesize voice. Order of preference:
-            1. `espeak` CLI (system-installed, deterministic)
-            2. pyttsx3 (if it can find a backend)
-            3. silent placeholder (logged loudly so it can't slip past review)
-
-        For real production we still target Sarvam/ElevenLabs via the
-        existing voice_engine.py adapter — this is the SAMPLE renderer that
-        must produce audible output even with zero API keys.
+            1. **Sarvam** (Hinglish-native, market-grade)
+            2. ElevenLabs Multilingual v2 (Hinglish via prosody)
+            3. espeak CLI (last-ditch sanity audio)
+            4. silent placeholder (logged loudly)
         """
-        text = voice_plan.get("natural_text", "") or ""
-        # Strip [emph] tags — espeak treats them as text otherwise.
+        text = (voice_plan.get("natural_text") or "").strip()
         text = text.replace("[emph]", "").replace("[/emph]", "")
+        if not text:
+            _write_silent_wav(out, seconds=T, sample_rate=24000)
+            return out
 
-        # 1) espeak CLI
+        # 1) Sarvam
+        if self._try_sarvam(text, out, voice_plan):
+            return out
+
+        # 2) ElevenLabs
+        if self._try_elevenlabs(text, out, voice_plan):
+            return out
+
+        # 3) espeak last-resort
         espeak = shutil.which("espeak")
-        if espeak and text.strip():
+        if espeak:
             wpm = int(voice_plan.get("pace_wpm", 165) * 0.95)
             try:
-                cmd = [
-                    espeak, "-v", "en-in", "-s", str(wpm), "-p", "55",
-                    "-w", str(out), text[:8000],
-                ]
+                cmd = [espeak, "-v", "en-in", "-s", str(wpm), "-p", "55",
+                       "-w", str(out), text[:8000]]
                 r = subprocess.run(cmd, capture_output=True, timeout=120)
                 if r.returncode == 0 and out.exists() and out.stat().st_size > 1024:
-                    log.info("[studio/voice] espeak wrote %s (%d KB)",
-                             out, out.stat().st_size // 1024)
+                    log.warning("[studio/voice] using espeak fallback (Sarvam/EL keys missing)")
                     return out
-                log.warning("[studio/voice] espeak rc=%d stderr=%s",
-                            r.returncode, r.stderr.decode("utf-8", "ignore")[:200])
             except Exception as e:
                 log.warning("[studio/voice] espeak failed: %s", e)
 
-        # 2) pyttsx3
-        try:
-            import pyttsx3  # type: ignore
-            engine = pyttsx3.init()
-            engine.setProperty("rate", int(voice_plan.get("pace_wpm", 165) * 0.95))
-            engine.save_to_file(text, str(out))
-            engine.runAndWait()
-            if out.exists() and out.stat().st_size > 1024:
-                log.info("[studio/voice] pyttsx3 wrote %s", out)
-                return out
-        except Exception as e:
-            log.warning("[studio/voice] pyttsx3 failed: %s", e)
-
-        # 3) silent fallback
         _write_silent_wav(out, seconds=T, sample_rate=24000)
-        log.warning("[studio/voice] using silent placeholder (no TTS available)")
+        log.warning("[studio/voice] using SILENT placeholder — no TTS reachable")
         return out
+
+    @staticmethod
+    def _sarvam_key() -> str:
+        # Accept both standard env name AND the literal-spaced provisioning name.
+        return (os.environ.get("SARVAM_API_KEY")
+                or os.environ.get("sarvam api key")
+                or os.environ.get("SARVAM_KEY")
+                or "").strip()
+
+    def _try_sarvam(self, text: str, out: Path, voice_plan: dict[str, Any]) -> bool:
+        key = self._sarvam_key()
+        if not key:
+            return False
+        try:
+            import base64, httpx
+            # Sarvam caps inputs at 500 chars per chunk — split sensibly.
+            chunks = self._chunk_for_tts(text, max_chars=480)
+            wav_pieces = []
+            voice = voice_plan.get("sarvam_voice") or "anushka"
+            pace = max(0.5, min(2.0, voice_plan.get("pace_wpm", 165) / 165.0))
+            for chunk in chunks:
+                payload = {
+                    "inputs": [chunk],
+                    "target_language_code": "hi-IN",
+                    "speaker": voice,
+                    "pitch": 0.0,
+                    "pace": round(pace, 2),
+                    "loudness": 1.0,
+                    "speech_sample_rate": 22050,
+                    "enable_preprocessing": True,
+                    "model": "bulbul:v2",
+                }
+                with httpx.Client(timeout=90.0) as c:
+                    r = c.post("https://api.sarvam.ai/text-to-speech",
+                               json=payload,
+                               headers={"api-subscription-key": key,
+                                        "Content-Type": "application/json"})
+                if r.status_code != 200:
+                    log.warning("[studio/voice/sarvam] HTTP %d: %s",
+                                r.status_code, r.text[:200])
+                    return False
+                data = r.json()
+                audios = data.get("audios") or []
+                if not audios:
+                    log.warning("[studio/voice/sarvam] empty audios array")
+                    return False
+                wav_pieces.append(base64.b64decode(audios[0]))
+            # Concat WAV bytes — Sarvam returns 22050Hz PCM WAV; concat by parsing.
+            concat_wav = self._concat_wavs(wav_pieces)
+            out.write_bytes(concat_wav)
+            log.info("[studio/voice/sarvam] %d chunks → %s (%d KB)",
+                     len(chunks), out, out.stat().st_size // 1024)
+            return True
+        except Exception as e:
+            log.warning("[studio/voice/sarvam] failed: %s", e)
+            return False
+
+    def _try_elevenlabs(self, text: str, out: Path, voice_plan: dict[str, Any]) -> bool:
+        key = (os.environ.get("ELEVENLABS_API_KEY") or "").strip()
+        if not key:
+            return False
+        try:
+            import httpx
+            voice_id = (os.environ.get("ELEVENLABS_VOICE_ID_HUMAN_DECODER")
+                        or os.environ.get("ELEVENLABS_VOICE_ID")
+                        or "21m00Tcm4TlvDq8ikWAM")  # default Rachel
+            r = httpx.post(
+                f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}",
+                json={
+                    "text": text[:5000],
+                    "model_id": "eleven_multilingual_v2",
+                    "voice_settings": {"stability": 0.45, "similarity_boost": 0.78,
+                                       "style": 0.45, "use_speaker_boost": True},
+                },
+                headers={"xi-api-key": key, "accept": "audio/mpeg",
+                         "Content-Type": "application/json"},
+                timeout=90.0,
+            )
+            if r.status_code != 200:
+                log.warning("[studio/voice/elevenlabs] HTTP %d", r.status_code)
+                return False
+            # ElevenLabs returns mp3; we'll let ffmpeg consume mp3 in the mux step.
+            mp3_path = out.with_suffix(".mp3")
+            mp3_path.write_bytes(r.content)
+            # Convert to wav using ffmpeg
+            subprocess.run([
+                self.ffmpeg, "-y", "-i", str(mp3_path),
+                "-ar", "22050", "-ac", "1", str(out),
+            ], capture_output=True, timeout=60)
+            return out.exists() and out.stat().st_size > 1024
+        except Exception as e:
+            log.warning("[studio/voice/elevenlabs] failed: %s", e)
+            return False
+
+    @staticmethod
+    def _chunk_for_tts(text: str, *, max_chars: int) -> list[str]:
+        """Split on sentence boundaries; never exceed max_chars."""
+        import re
+        sents = re.split(r"(?<=[.!?])\s+", text.strip())
+        out, cur = [], ""
+        for s in sents:
+            if len(cur) + len(s) + 1 <= max_chars:
+                cur = (cur + " " + s).strip()
+            else:
+                if cur:
+                    out.append(cur)
+                cur = s if len(s) <= max_chars else s[:max_chars]
+        if cur:
+            out.append(cur)
+        return out
+
+    @staticmethod
+    def _concat_wavs(pieces: list[bytes]) -> bytes:
+        """Concatenate WAV byte blobs with the SAME format. Sarvam returns
+        consistent 22050Hz mono 16-bit, so we strip headers from all but
+        the first and rebuild a single header."""
+        import io, wave
+        if not pieces:
+            return b""
+        if len(pieces) == 1:
+            return pieces[0]
+        frames = []
+        params = None
+        for blob in pieces:
+            with wave.open(io.BytesIO(blob), "rb") as w:
+                if params is None:
+                    params = w.getparams()
+                frames.append(w.readframes(w.getnframes()))
+        out = io.BytesIO()
+        with wave.open(out, "wb") as w:
+            w.setparams(params)
+            w.writeframes(b"".join(frames))
+        return out.getvalue()
 
     # ---- Music synthesis (intensity curve baked in) ---------------------
 
@@ -297,10 +514,12 @@ class StudioRenderer:
     def _paint_frames(self, timeline: dict[str, Any], channel: dict[str, Any],
                       voice_plan: dict[str, Any],
                       characters_dir: Path | str | None,
-                      frames_dir: Path, T: float) -> int:
+                      frames_dir: Path, T: float,
+                      *, broll: dict[str, Any] | None = None) -> int:
         """Paint every frame deterministically. CPU-only Pillow."""
-        from PIL import Image, ImageDraw, ImageFilter, ImageFont
+        from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageEnhance
         import numpy as np
+        broll = broll or {}
 
         # Load palette — channels.yaml stores DESCRIPTIVE names; map to hex.
         vstyle = channel.get("visual_style", {})
@@ -326,8 +545,15 @@ class StudioRenderer:
         for f in range(n_frames):
             t = f / self.fps
 
-            # Background gradient with subtle scroll
-            img = self._gradient(bg_a, bg_b, t)
+            # Resolve current beat
+            cur_beat = "hook"
+            for tr in char_track:
+                if tr["from_sec"] <= t <= tr["to_sec"]:
+                    cur_beat = tr["beat"]
+                    break
+
+            # Background: real B-roll if we have it, else gradient
+            img = self._beat_background(cur_beat, t, broll, bg_a, bg_b)
 
             # Camera transform state
             zoom = 1.0
@@ -335,7 +561,6 @@ class StudioRenderer:
             offset_y = 0.0
             rot_deg = 0.0
             blur_sigma = 0.0
-            speed_factor = 1.0
 
             for ev in events:
                 t0 = float(ev["time"])
@@ -378,15 +603,16 @@ class StudioRenderer:
                     break
             char_img = char_imgs.get(expr) or char_imgs.get("curious")
 
-            # Composite character with breath-bob
-            if char_img is not None:
+            # Composite character only on hook/twist/loop beats; let B-roll
+            # breathe on escalation/reveal so it feels less template-y.
+            if char_img is not None and cur_beat in {"hook", "twist", "loop"}:
                 bob = 4 * math.sin(2 * math.pi * 0.6 * t)
                 cw, ch = char_img.size
-                target_w = int(self.W * 0.66 * zoom)
+                target_w = int(self.W * 0.58 * zoom)
                 target_h = int(target_w * ch / cw)
                 resized = char_img.resize((target_w, target_h), Image.LANCZOS)
                 px = int((self.W - target_w) / 2 + offset_x)
-                py = int(self.H * 0.10 + bob + offset_y)
+                py = int(self.H * 0.08 + bob + offset_y)
                 img.paste(resized, (px, py), resized)
 
             # Draw kinetic text / subtitles / overlays / arrows / focus / memes
@@ -429,7 +655,6 @@ class StudioRenderer:
                     draw.line([(sx, sy), (cx_, cy_)],
                               fill=_hex(p.get("color", "#FF4D4D")),
                               width=int(p.get("thickness", 8)))
-                    # arrowhead
                     self._arrow_head(draw, (sx, sy), (cx_, cy_),
                                      _hex(p.get("color", "#FF4D4D")))
                 elif act == "glow_indicator":
@@ -466,6 +691,32 @@ class StudioRenderer:
             img.convert("RGB").save(frames_dir / f"f_{f:05d}.jpg", quality=84)
 
         return n_frames
+
+    def _beat_background(self, beat: str, t: float, broll: dict[str, Any],
+                         bg_a: tuple[int, int, int], bg_b: tuple[int, int, int]):
+        """Real Pexels B-roll if we have it for this beat (subtle blur + dim
+        so foreground reads), else gradient fallback."""
+        from PIL import Image, ImageEnhance, ImageFilter, ImageDraw as _D
+        meta = broll.get(beat)
+        if meta:
+            idx = int(t * self.fps) % max(1, meta["frame_count"])
+            src = meta["frames_dir"] / f"f_{idx + 1:05d}.jpg"
+            if src.exists():
+                try:
+                    img = Image.open(src).convert("RGB")
+                    img = img.filter(ImageFilter.GaussianBlur(radius=2.0))
+                    img = ImageEnhance.Brightness(img).enhance(0.74)
+                    rgba = img.convert("RGBA")
+                    overlay = Image.new("RGBA", (self.W, self.H), (0, 0, 0, 0))
+                    _D.Draw(overlay).rectangle(
+                        (0, 0, self.W, int(self.H * 0.16)), fill=(0, 0, 0, 100))
+                    _D.Draw(overlay).rectangle(
+                        (0, int(self.H * 0.84), self.W, self.H), fill=(0, 0, 0, 130))
+                    rgba.alpha_composite(overlay)
+                    return rgba
+                except Exception:
+                    pass
+        return self._gradient(bg_a, bg_b, t)
 
     # ---- Drawing helpers -------------------------------------------------
 

@@ -98,6 +98,7 @@ class ReviewStage:
             sentences=all_sentences,
             pace_wpm=channel.get("voice", {}).get("pace_words_per_minute"),
             emotion=script.emotion,
+            sarvam_voice=channel.get("voice", {}).get("sarvam_voice", "anushka"),
         )
 
         # 3) Music (emotional + intensity curve) -------------------------

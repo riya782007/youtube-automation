@@ -1,0 +1,11 @@
+{
+  "hook": 8.7,
+  "voice": 8.4,
+  "visual_density": 8.6,
+  "emotion": 8.8,
+  "editing": 8.5,
+  "retention_prediction": 8.6,
+  "notes": "[mock] looks tight; verify reveal lands within 18s.",
+  "average": 8.6,
+  "passes": true
+}

@@ -1,0 +1,836 @@
+{
+  "video_id": "sample_human_decoder_20260524_160432_d6fdca",
+  "channel_id": "human_decoder",
+  "total_seconds": 26.82,
+  "events": [
+    {
+      "time": 0.0,
+      "action": "character_in",
+      "reason": "retention",
+      "duration_sec": 0.35,
+      "intensity": 0.7,
+      "payload": {
+        "expression": "curious",
+        "scale_in": 1.1
+      }
+    },
+    {
+      "time": 0.0,
+      "action": "push_zoom",
+      "reason": "focus",
+      "duration_sec": 1.0,
+      "intensity": 0.9,
+      "payload": {
+        "kind": "push_zoom",
+        "start_sec": 0.0,
+        "end_sec": 1.0,
+        "intensity": 0.6,
+        "params": {
+          "zoom_to": 1.18,
+          "ease": "easeOutCubic"
+        },
+        "reason": "focus"
+      }
+    },
+    {
+      "time": 0.0,
+      "action": "sub_bass_punch",
+      "reason": "surprise",
+      "duration_sec": 0.6,
+      "intensity": 0.95,
+      "payload": {
+        "layer": "transition"
+      }
+    },
+    {
+      "time": 0.05,
+      "action": "depth_parallax",
+      "reason": "retention",
+      "duration_sec": 2.9830909090909095,
+      "intensity": 0.5,
+      "payload": {
+        "kind": "depth_parallax",
+        "start_sec": 0.05,
+        "end_sec": 2.9830909090909095,
+        "intensity": 0.5,
+        "params": {
+          "layers": 3,
+          "max_offset_px": 22
+        },
+        "reason": "retention"
+      }
+    },
+    {
+      "time": 0.2,
+      "action": "heartbeat_sfx",
+      "reason": "emotion",
+      "duration_sec": 1.4,
+      "intensity": 0.6,
+      "payload": {
+        "layer": "sfx",
+        "loop": false
+      }
+    },
+    {
+      "time": 0.22,
+      "action": "kinetic_text",
+      "reason": "focus",
+      "duration_sec": 1.889,
+      "intensity": 0.9,
+      "payload": {
+        "kind": "kinetic_text",
+        "start_sec": 0.22,
+        "end_sec": 2.109,
+        "intensity": 0.9,
+        "params": {
+          "text": "She stopped replying suddenly...",
+          "words": [
+            "She",
+            "stopped",
+            "replying",
+            "suddenly..."
+          ],
+          "style": "punchy",
+          "max_words_visible": 4,
+          "reveal_per_chunk_sec": 1.4167500000000002,
+          "color": "#FFFFFF",
+          "stroke": "#000000",
+          "shadow_blur": 6,
+          "scale_in": 1.18
+        },
+        "reason": "focus"
+      }
+    },
+    {
+      "time": 1.356,
+      "action": "elastic_burst",
+      "reason": "emotion",
+      "duration_sec": 0.35,
+      "intensity": 0.85,
+      "payload": {
+        "kind": "elastic_burst",
+        "start_sec": 1.356,
+        "end_sec": 1.706,
+        "intensity": 0.9,
+        "params": {
+          "label": "suddenly...",
+          "scale_peak": 1.45,
+          "ease": "elastic"
+        },
+        "reason": "emotion"
+      }
+    },
+    {
+      "time": 2.483,
+      "action": "elastic_burst",
+      "reason": "emotion",
+      "duration_sec": 0.35,
+      "intensity": 0.85,
+      "payload": {
+        "kind": "elastic_burst",
+        "start_sec": 2.483,
+        "end_sec": 2.833,
+        "intensity": 0.9,
+        "params": {
+          "label": "Yeh",
+          "scale_peak": 1.45,
+          "ease": "elastic"
+        },
+        "reason": "emotion"
+      }
+    },
+    {
+      "time": 2.483,
+      "action": "kinetic_text",
+      "reason": "focus",
+      "duration_sec": 1.991,
+      "intensity": 0.9,
+      "payload": {
+        "kind": "kinetic_text",
+        "start_sec": 2.483,
+        "end_sec": 4.474,
+        "intensity": 0.9,
+        "params": {
+          "text": "Yeh actually kya matlab hai?",
+          "words": [
+            "Yeh",
+            "actually",
+            "kya",
+            "matlab",
+            "hai?"
+          ],
+          "style": "punchy",
+          "max_words_visible": 4,
+          "reveal_per_chunk_sec": 1.1946,
+          "color": "#FFFFFF",
+          "stroke": "#000000",
+          "shadow_blur": 6,
+          "scale_in": 1.18
+        },
+        "reason": "focus"
+      }
+    },
+    {
+      "time": 4.749,
+      "action": "subtitle",
+      "reason": "retention",
+      "duration_sec": 2.08,
+      "intensity": 0.5,
+      "payload": {
+        "text": "Aapko lagta hai vo busy hai.",
+        "style": "subtitle"
+      }
+    },
+    {
+      "time": 4.75,
+      "action": "blur_transition",
+      "reason": "retention",
+      "duration_sec": 0.18,
+      "intensity": 0.7,
+      "payload": {
+        "kind": "blur_transition",
+        "start_sec": 4.75,
+        "end_sec": 4.93,
+        "intensity": 0.7,
+        "params": {
+          "sigma_peak": 12
+        },
+        "reason": "retention"
+      }
+    },
+    {
+      "time": 4.75,
+      "action": "scene_cut",
+      "reason": "retention",
+      "duration_sec": 0.0,
+      "intensity": 0.85,
+      "payload": {
+        "to_beat": "escalation"
+      }
+    },
+    {
+      "time": 4.8,
+      "action": "camera_drift",
+      "reason": "retention",
+      "duration_sec": 4.34,
+      "intensity": 0.4,
+      "payload": {
+        "kind": "camera_drift",
+        "start_sec": 4.8,
+        "end_sec": 9.09,
+        "intensity": 0.4,
+        "params": {
+          "dx": 0.012,
+          "dy": -0.004
+        },
+        "reason": "retention"
+      }
+    },
+    {
+      "time": 5.05,
+      "action": "reaction_meme",
+      "reason": "humor",
+      "duration_sec": 0.7,
+      "intensity": 0.7,
+      "payload": {
+        "asset": "auto://meme/raised-eyebrow",
+        "x": 0.78,
+        "y": 0.18,
+        "scale": 0.22
+      }
+    },
+    {
+      "time": 5.886,
+      "action": "elastic_burst",
+      "reason": "emotion",
+      "duration_sec": 0.35,
+      "intensity": 0.85,
+      "payload": {
+        "kind": "elastic_burst",
+        "start_sec": 5.886,
+        "end_sec": 6.236,
+        "intensity": 0.9,
+        "params": {
+          "label": "vo",
+          "scale_peak": 1.45,
+          "ease": "elastic"
+        },
+        "reason": "emotion"
+      }
+    },
+    {
+      "time": 7.269,
+      "action": "subtitle",
+      "reason": "retention",
+      "duration_sec": 1.8249999999999993,
+      "intensity": 0.5,
+      "payload": {
+        "text": "Lekin truth different hai bro.",
+        "style": "subtitle"
+      }
+    },
+    {
+      "time": 7.724,
+      "action": "elastic_burst",
+      "reason": "emotion",
+      "duration_sec": 0.35,
+      "intensity": 0.85,
+      "payload": {
+        "kind": "elastic_burst",
+        "start_sec": 7.724,
+        "end_sec": 8.074,
+        "intensity": 0.9,
+        "params": {
+          "label": "truth",
+          "scale_peak": 1.45,
+          "ease": "elastic"
+        },
+        "reason": "emotion"
+      }
+    },
+    {
+      "time": 9.31,
+      "action": "blur_transition",
+      "reason": "retention",
+      "duration_sec": 0.18,
+      "intensity": 0.7,
+      "payload": {
+        "kind": "blur_transition",
+        "start_sec": 9.31,
+        "end_sec": 9.49,
+        "intensity": 0.7,
+        "params": {
+          "sigma_peak": 12
+        },
+        "reason": "retention"
+      }
+    },
+    {
+      "time": 9.31,
+      "action": "scene_cut",
+      "reason": "retention",
+      "duration_sec": 0.0,
+      "intensity": 0.85,
+      "payload": {
+        "to_beat": "reveal"
+      }
+    },
+    {
+      "time": 9.314,
+      "action": "elastic_burst",
+      "reason": "emotion",
+      "duration_sec": 0.35,
+      "intensity": 0.85,
+      "payload": {
+        "kind": "elastic_burst",
+        "start_sec": 9.314,
+        "end_sec": 9.664,
+        "intensity": 0.9,
+        "params": {
+          "label": "Vo",
+          "scale_peak": 1.45,
+          "ease": "elastic"
+        },
+        "reason": "emotion"
+      }
+    },
+    {
+      "time": 9.314,
+      "action": "subtitle",
+      "reason": "retention",
+      "duration_sec": 1.8249999999999993,
+      "intensity": 0.5,
+      "payload": {
+        "text": "Vo overthink kar rahi hai.",
+        "style": "subtitle"
+      }
+    },
+    {
+      "time": 9.41,
+      "action": "push_zoom",
+      "reason": "focus",
+      "duration_sec": 2.0,
+      "intensity": 0.7,
+      "payload": {
+        "kind": "push_zoom",
+        "start_sec": 9.41,
+        "end_sec": 11.31,
+        "intensity": 0.6,
+        "params": {
+          "zoom_to": 1.1,
+          "ease": "easeOutCubic"
+        },
+        "reason": "focus"
+      }
+    },
+    {
+      "time": 9.51,
+      "action": "focus_circle",
+      "reason": "focus",
+      "duration_sec": 1.4,
+      "intensity": 0.7,
+      "payload": {
+        "kind": "focus_circle",
+        "start_sec": 9.51,
+        "end_sec": 10.91,
+        "intensity": 0.7,
+        "params": {
+          "x": 0.5,
+          "y": 0.42,
+          "radius": 0.18,
+          "stroke_color": "#FFD86B",
+          "stroke_w": 6,
+          "pulse": true
+        },
+        "reason": "focus"
+      }
+    },
+    {
+      "time": 9.86,
+      "action": "animated_arrow",
+      "reason": "focus",
+      "duration_sec": 1.0,
+      "intensity": 0.8,
+      "payload": {
+        "kind": "animated_arrow",
+        "start_sec": 9.860000000000001,
+        "end_sec": 10.860000000000001,
+        "intensity": 0.8,
+        "params": {
+          "from": [
+            0.18,
+            0.78
+          ],
+          "to": [
+            0.45,
+            0.46
+          ],
+          "color": "#FF4D4D",
+          "thickness": 8,
+          "wobble": 0.12
+        },
+        "reason": "focus"
+      }
+    },
+    {
+      "time": 11.359,
+      "action": "subtitle",
+      "reason": "retention",
+      "duration_sec": 2.244999999999999,
+      "intensity": 0.5,
+      "payload": {
+        "text": "Har message ka weight feel karti hai.",
+        "style": "subtitle"
+      }
+    },
+    {
+      "time": 11.36,
+      "action": "fake_handheld",
+      "reason": "retention",
+      "duration_sec": 1.6,
+      "intensity": 0.35,
+      "payload": {
+        "kind": "fake_handheld",
+        "start_sec": 11.360000000000001,
+        "end_sec": 12.96,
+        "intensity": 0.35,
+        "params": {
+          "freq": 1.6,
+          "amp_px": 6,
+          "rotation_deg": 0.6
+        },
+        "reason": "retention"
+      }
+    },
+    {
+      "time": 14.044,
+      "action": "subtitle",
+      "reason": "retention",
+      "duration_sec": 2.6739999999999995,
+      "intensity": 0.5,
+      "payload": {
+        "text": "Silence matlab tension, not boredom.",
+        "style": "subtitle"
+      }
+    },
+    {
+      "time": 14.699,
+      "action": "elastic_burst",
+      "reason": "emotion",
+      "duration_sec": 0.35,
+      "intensity": 0.85,
+      "payload": {
+        "kind": "elastic_burst",
+        "start_sec": 14.699,
+        "end_sec": 15.049,
+        "intensity": 0.9,
+        "params": {
+          "label": "matlab",
+          "scale_peak": 1.45,
+          "ease": "elastic"
+        },
+        "reason": "emotion"
+      }
+    },
+    {
+      "time": 16.938,
+      "action": "kinetic_text",
+      "reason": "focus",
+      "duration_sec": 2.046000000000003,
+      "intensity": 0.9,
+      "payload": {
+        "kind": "kinetic_text",
+        "start_sec": 16.938,
+        "end_sec": 18.984,
+        "intensity": 0.9,
+        "params": {
+          "text": "But ek galti most boys karte hain.",
+          "words": [
+            "But",
+            "ek",
+            "galti",
+            "most",
+            "boys",
+            "karte",
+            "hain."
+          ],
+          "style": "punchy",
+          "max_words_visible": 4,
+          "reveal_per_chunk_sec": 0.876857142857144,
+          "color": "#FFFFFF",
+          "stroke": "#000000",
+          "shadow_blur": 6,
+          "scale_in": 1.18
+        },
+        "reason": "focus"
+      }
+    },
+    {
+      "time": 16.94,
+      "action": "blur_transition",
+      "reason": "retention",
+      "duration_sec": 0.18,
+      "intensity": 0.7,
+      "payload": {
+        "kind": "blur_transition",
+        "start_sec": 16.94,
+        "end_sec": 17.12,
+        "intensity": 0.7,
+        "params": {
+          "sigma_peak": 12
+        },
+        "reason": "retention"
+      }
+    },
+    {
+      "time": 16.94,
+      "action": "scene_cut",
+      "reason": "retention",
+      "duration_sec": 0.0,
+      "intensity": 0.85,
+      "payload": {
+        "to_beat": "twist"
+      }
+    },
+    {
+      "time": 16.94,
+      "action": "speed_ramp",
+      "reason": "surprise",
+      "duration_sec": 0.6,
+      "intensity": 0.85,
+      "payload": {
+        "kind": "speed_ramp",
+        "start_sec": 16.94,
+        "end_sec": 17.540000000000003,
+        "intensity": 0.7,
+        "params": {
+          "ramp": [
+            0.85,
+            1.2
+          ]
+        },
+        "reason": "surprise"
+      }
+    },
+    {
+      "time": 16.99,
+      "action": "camera_shake",
+      "reason": "surprise",
+      "duration_sec": 0.45,
+      "intensity": 0.65,
+      "payload": {
+        "kind": "camera_shake",
+        "start_sec": 16.990000000000002,
+        "end_sec": 17.44,
+        "intensity": 0.65,
+        "params": {
+          "freq": 28,
+          "amp_px": 14
+        },
+        "reason": "surprise"
+      }
+    },
+    {
+      "time": 19.204,
+      "action": "kinetic_text",
+      "reason": "focus",
+      "duration_sec": 2.7429999999999986,
+      "intensity": 0.9,
+      "payload": {
+        "kind": "kinetic_text",
+        "start_sec": 19.204,
+        "end_sec": 21.947,
+        "intensity": 0.9,
+        "params": {
+          "text": "Double-text pressure dete hain instantly.",
+          "words": [
+            "Double-text",
+            "pressure",
+            "dete",
+            "hain",
+            "instantly."
+          ],
+          "style": "punchy",
+          "max_words_visible": 4,
+          "reveal_per_chunk_sec": 1.645799999999999,
+          "color": "#FFFFFF",
+          "stroke": "#000000",
+          "shadow_blur": 6,
+          "scale_in": 1.18
+        },
+        "reason": "focus"
+      }
+    },
+    {
+      "time": 21.194,
+      "action": "elastic_burst",
+      "reason": "emotion",
+      "duration_sec": 0.35,
+      "intensity": 0.85,
+      "payload": {
+        "kind": "elastic_burst",
+        "start_sec": 21.194,
+        "end_sec": 21.544,
+        "intensity": 0.9,
+        "params": {
+          "label": "instantly.",
+          "scale_peak": 1.45,
+          "ease": "elastic"
+        },
+        "reason": "emotion"
+      }
+    },
+    {
+      "time": 22.387,
+      "action": "kinetic_text",
+      "reason": "focus",
+      "duration_sec": 2.0180000000000007,
+      "intensity": 0.9,
+      "payload": {
+        "kind": "kinetic_text",
+        "start_sec": 22.387,
+        "end_sec": 24.405,
+        "intensity": 0.9,
+        "params": {
+          "text": "Kal phir same situation aayegi.",
+          "words": [
+            "Kal",
+            "phir",
+            "same",
+            "situation",
+            "aayegi."
+          ],
+          "style": "punchy",
+          "max_words_visible": 4,
+          "reveal_per_chunk_sec": 1.2108000000000003,
+          "color": "#FFFFFF",
+          "stroke": "#000000",
+          "shadow_blur": 6,
+          "scale_in": 1.18
+        },
+        "reason": "focus"
+      }
+    },
+    {
+      "time": 22.39,
+      "action": "blur_transition",
+      "reason": "retention",
+      "duration_sec": 0.18,
+      "intensity": 0.7,
+      "payload": {
+        "kind": "blur_transition",
+        "start_sec": 22.39,
+        "end_sec": 22.57,
+        "intensity": 0.7,
+        "params": {
+          "sigma_peak": 12
+        },
+        "reason": "retention"
+      }
+    },
+    {
+      "time": 22.39,
+      "action": "scene_cut",
+      "reason": "retention",
+      "duration_sec": 0.0,
+      "intensity": 0.85,
+      "payload": {
+        "to_beat": "loop"
+      }
+    },
+    {
+      "time": 24.625,
+      "action": "kinetic_text",
+      "reason": "focus",
+      "duration_sec": 1.818999999999999,
+      "intensity": 0.9,
+      "payload": {
+        "kind": "kinetic_text",
+        "start_sec": 24.625,
+        "end_sec": 26.444,
+        "intensity": 0.9,
+        "params": {
+          "text": "Ab pata hai kya karna hai...",
+          "words": [
+            "Ab",
+            "pata",
+            "hai",
+            "kya",
+            "karna",
+            "hai..."
+          ],
+          "style": "punchy",
+          "max_words_visible": 4,
+          "reveal_per_chunk_sec": 0.9094999999999995,
+          "color": "#FFFFFF",
+          "stroke": "#000000",
+          "shadow_blur": 6,
+          "scale_in": 1.18
+        },
+        "reason": "focus"
+      }
+    },
+    {
+      "time": 24.84,
+      "action": "music_fade",
+      "reason": "loop",
+      "duration_sec": 1.4,
+      "intensity": 0.4,
+      "payload": {
+        "to_db": -34.0
+      }
+    },
+    {
+      "time": 25.24,
+      "action": "comment_prompt",
+      "reason": "retention",
+      "duration_sec": 1.0,
+      "intensity": 0.7,
+      "payload": {
+        "text": "True or false?",
+        "y": 0.9,
+        "style": "pill"
+      }
+    },
+    {
+      "time": 25.24,
+      "action": "glow_indicator",
+      "reason": "retention",
+      "duration_sec": 1.0,
+      "intensity": 0.55,
+      "payload": {
+        "kind": "glow_indicator",
+        "start_sec": 25.240000000000002,
+        "end_sec": 26.240000000000002,
+        "intensity": 0.6,
+        "params": {
+          "x": 0.5,
+          "y": 0.92,
+          "color": "#7CF6FF",
+          "radius": 0.22
+        },
+        "reason": "retention"
+      }
+    },
+    {
+      "time": 25.94,
+      "action": "loop_sting",
+      "reason": "loop",
+      "duration_sec": 0.5,
+      "intensity": 0.85,
+      "payload": {
+        "layer": "transition"
+      }
+    }
+  ],
+  "music_curve": [
+    {
+      "time": 0.0,
+      "intensity": 1.0,
+      "label": "hook"
+    },
+    {
+      "time": 1.88,
+      "intensity": 0.95,
+      "label": "hook"
+    },
+    {
+      "time": 7.24,
+      "intensity": 0.55,
+      "label": "setup"
+    },
+    {
+      "time": 16.09,
+      "intensity": 0.78,
+      "label": "build"
+    },
+    {
+      "time": 22.26,
+      "intensity": 1.0,
+      "label": "spike"
+    },
+    {
+      "time": 24.94,
+      "intensity": 0.55,
+      "label": "fade"
+    },
+    {
+      "time": 26.82,
+      "intensity": 0.18,
+      "label": "fade"
+    }
+  ],
+  "character_expression_track": [
+    {
+      "from_sec": 0.22,
+      "to_sec": 4.47,
+      "beat": "hook",
+      "expression": "curious"
+    },
+    {
+      "from_sec": 4.75,
+      "to_sec": 9.09,
+      "beat": "escalation",
+      "expression": "curious"
+    },
+    {
+      "from_sec": 9.31,
+      "to_sec": 16.72,
+      "beat": "reveal",
+      "expression": "curious"
+    },
+    {
+      "from_sec": 16.94,
+      "to_sec": 21.95,
+      "beat": "twist",
+      "expression": "shocked"
+    },
+    {
+      "from_sec": 22.39,
+      "to_sec": 26.44,
+      "beat": "loop",
+      "expression": "happy"
+    }
+  ],
+  "rationale": "emotion=curiosity; voice_total=26.8s @ 165wpm; emphasis_words=7; beats=hook→escalation→reveal→twist→loop; music=Mysterious Drone (curated) / target_bpm=[80, 110]"
+}

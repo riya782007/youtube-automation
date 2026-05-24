@@ -1,0 +1,27 @@
+# Why she stops replying suddenly
+
+_Pinned comment_: Comment YES if this happened to you.
+
+## hook  (0s → 2s)
+- She stopped replying suddenly...
+- Yeh actually kya matlab hai?
+
+## escalation  (2s → 8s)
+- Aapko lagta hai vo busy hai.
+- Lekin truth different hai bro.
+
+## reveal  (8s → 18s)
+- Vo overthink kar rahi hai.
+- Har message ka weight feel karti hai.
+- Silence matlab tension, not boredom.
+
+## twist  (18s → 25s)
+- But ek galti most boys karte hain.
+- Double-text pressure dete hain instantly.
+
+## loop  (25s → 30s)
+- Kal phir same situation aayegi.
+- Ab pata hai kya karna hai...
+
+---
+Pace: 165 WPM | Total: 26.8s | Emphasis words: ['actually', 'instantly', 'matlab', 'suddenly', 'truth', 'vo', 'yeh']

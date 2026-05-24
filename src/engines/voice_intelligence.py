@@ -65,6 +65,7 @@ class VoicePlan:
     pauses_inserted: int
     breaths_inserted: int
     emphasis_words: list[str]
+    sarvam_voice: str = "anushka"
 
     def to_dict(self) -> dict[str, Any]:
         d = {
@@ -76,6 +77,7 @@ class VoicePlan:
             "pauses_inserted": self.pauses_inserted,
             "breaths_inserted": self.breaths_inserted,
             "emphasis_words": self.emphasis_words,
+            "sarvam_voice": self.sarvam_voice,
         }
         return d
 
@@ -85,7 +87,8 @@ class VoiceIntelligence:
         self.default_wpm = default_wpm
 
     def prepare(self, *, sentences: list[str], pace_wpm: int | None = None,
-                emotion: str = "curiosity") -> VoicePlan:
+                emotion: str = "curiosity",
+                sarvam_voice: str = "anushka") -> VoicePlan:
         wpm = int(pace_wpm or self.default_wpm)
         clean: list[str] = []
         word_timings: list[WordTiming] = []
@@ -169,6 +172,7 @@ class VoiceIntelligence:
             pauses_inserted=pauses,
             breaths_inserted=breaths,
             emphasis_words=sorted(set(emphasis_log)),
+            sarvam_voice=sarvam_voice,
         )
 
     # ---- Humanization ----------------------------------------------------
