@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "description": "Every published video's analytics snapshots. The LearningEngine reads from here.",
+  "videos": [],
+  "winning_signals": {
+    "hooks": [],
+    "structures": [],
+    "emotions": [],
+    "pacing": []
+  }
+}

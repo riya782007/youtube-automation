@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Env & secrets
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+secrets/
+
+# Generated artifacts (videos, voice, large assets)
+artifacts/
+output/
+*.mp4
+*.mov
+*.wav
+*.mp3
+!data/samples/*.mp3
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*~
+
+# Logs
+logs/
+*.log
+
+# Embeddings cache
+.embeddings_cache/
