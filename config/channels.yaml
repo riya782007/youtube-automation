@@ -1,0 +1,170 @@
+# Channel DNA — every engine reads from this file.
+# Changing values here changes the personality of the entire content output.
+
+channels:
+
+  human_decoder:
+    name: "Human Decoder"
+    category: "Psychology + Relationships + Human Behavior"
+    audience:
+      age_range: [16, 28]
+      core_psychology:
+        pains:
+          - "crush confusion"
+          - "texting anxiety"
+          - "relationship uncertainty"
+          - "social insecurity"
+          - "attraction curiosity"
+        desires:
+          - "validation"
+          - "love"
+          - "understanding people"
+          - "emotional certainty"
+    voice:
+      language: "hinglish"
+      tone: ["mysterious", "relatable", "emotionally engaging"]
+      tts_provider: "sarvam"
+      sarvam_voice: "anushka"          # warm female Hinglish — switch as needed
+      elevenlabs_voice_env: "ELEVENLABS_VOICE_ID_HUMAN_DECODER"
+      pace_words_per_minute: 165
+    retention:
+      target_pct: 85
+      min_acceptable_pct: 78
+      avg_view_duration_sec: 27
+    comment_triggers:
+      - "What do you think?"
+      - "True or false?"
+      - "Have you seen this?"
+      - "Type YES if this happened to you"
+    visual_style:
+      palette: ["deep navy", "soft gold", "muted red"]
+      effects: ["eye closeups", "arrows", "kinetic text", "reaction cuts", "emotional highlights", "meme inserts"]
+      asset_mix: { stock: 0.35, ai_visual: 0.35, overlay: 0.20, meme: 0.10 }
+    audio_palette:
+      music_mood: ["mysterious", "emotional"]
+      micro_sfx: ["heartbeat", "pulse", "whoosh", "soft tick", "vinyl crackle"]
+    topic_seeds:
+      - "texting behavior"
+      - "attraction signals"
+      - "body language"
+      - "hidden habits"
+      - "social psychology"
+      - "emotional facts"
+    forbidden_phrases:
+      - "psychology says"
+      - "studies show"
+      - "experts believe"
+      - "scientists found"
+    hook_archetypes:
+      - "If she does THIS, don't ignore it"
+      - "Why people suddenly stop replying"
+      - "Boys make this mistake every time"
+      - "People notice this BEFORE looks"
+      - "Your brain does this during a crush"
+
+  ai_money_lab:
+    name: "AI Money Lab"
+    category: "AI + Side Hustles + Future Opportunities"
+    audience:
+      age_range: [18, 35]
+      core_psychology:
+        pains:
+          - "lack of money"
+          - "career uncertainty"
+          - "fear of missing opportunities"
+        desires:
+          - "financial growth"
+          - "freedom"
+          - "status"
+          - "smart shortcuts"
+    voice:
+      language: "hinglish"
+      tone: ["smart", "exciting", "high energy"]
+      tts_provider: "sarvam"
+      sarvam_voice: "arjun"
+      elevenlabs_voice_env: "ELEVENLABS_VOICE_ID_AI_MONEY_LAB"
+      pace_words_per_minute: 185
+    retention:
+      target_pct: 80
+      min_acceptable_pct: 72
+      avg_view_duration_sec: 26
+    comment_triggers:
+      - "Which one are you trying first?"
+      - "Drop your niche below"
+      - "Comment AI if you want part 2"
+      - "Tag a friend who needs this"
+    visual_style:
+      palette: ["electric blue", "neon green", "jet black"]
+      effects: ["UI captures", "screenshot zooms", "speed ramps", "kinetic typography", "graph reveals"]
+      asset_mix: { stock: 0.25, ai_visual: 0.30, overlay: 0.30, meme: 0.15 }
+    audio_palette:
+      music_mood: ["energetic", "future bass", "lo-fi tech"]
+      micro_sfx: ["keyboard", "cash register", "click", "notification ping", "ui swoosh"]
+    topic_seeds:
+      - "AI tools for income"
+      - "side hustles with no skills"
+      - "digital income paths"
+      - "future jobs"
+      - "productivity stacks"
+    forbidden_phrases:
+      - "guaranteed income"
+      - "make $$$ overnight"
+      - "passive income forever"
+      - "no work needed"
+    hook_archetypes:
+      - "3 AI tools replacing internships"
+      - "How students earn with AI"
+      - "AI business nobody noticed"
+      - "This site pays unexpectedly"
+      - "Future jobs AI won't kill"
+
+  dramaverse:
+    name: "DramaVerse Interactive"
+    category: "Interactive Emotional Stories"
+    audience:
+      age_range: [15, 30]
+      core_psychology:
+        pains:
+          - "loneliness"
+          - "relationship curiosity"
+          - "emotional uncertainty"
+        desires:
+          - "entertainment"
+          - "emotional engagement"
+          - "relatability"
+    voice:
+      language: "hinglish"
+      tone: ["dramatic", "emotional", "interactive"]
+      tts_provider: "sarvam"
+      sarvam_voice: "meera"
+      elevenlabs_voice_env: "ELEVENLABS_VOICE_ID_DRAMAVERSE"
+      pace_words_per_minute: 170
+    retention:
+      target_pct: 90
+      min_acceptable_pct: 82
+      avg_view_duration_sec: 28
+    comment_triggers:
+      - "A or B?"
+      - "What would YOU do?"
+      - "Drop your reply below"
+      - "Part 2 — comment yes"
+    visual_style:
+      palette: ["midnight purple", "soft pink", "warm white"]
+      effects: ["chat overlays", "phone frame", "reaction cuts", "emotional zoom", "split-screen choices"]
+      asset_mix: { stock: 0.40, ai_visual: 0.25, overlay: 0.25, meme: 0.10 }
+    audio_palette:
+      music_mood: ["dramatic", "tense", "romantic"]
+      micro_sfx: ["typing", "notification", "vibration", "heartbeat", "phone buzz"]
+    topic_seeds:
+      - "ex texts at 2am"
+      - "crush sends mixed signal"
+      - "best friend confession"
+      - "school crush drama"
+      - "wedding day dilemma"
+    forbidden_phrases: []
+    hook_archetypes:
+      - "Your ex texted at 2AM..."
+      - "Your crush suddenly sends this..."
+      - "She saw your message and replied..."
+      - "What he said next changed everything..."
+      - "You have 5 seconds — A or B?"

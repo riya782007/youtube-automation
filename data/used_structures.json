@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "description": "Emotional/structural arcs used. Stored as ordered tags e.g. ['curiosity','reveal','twist','loop'].",
+  "entries": []
+}

@@ -1,0 +1,18 @@
+{
+  "predicted_avg_view_pct": 89,
+  "confidence": "medium",
+  "drivers": {
+    "kinetic_text_count": 6,
+    "scene_cut_count": 4,
+    "focus_events": 10,
+    "emotion_events": 12,
+    "avg_visual_gap_sec": 1.17,
+    "max_visual_gap_sec": 5.19
+  },
+  "risk_factors": [
+    "max_visual_gap_too_long"
+  ],
+  "loop_strength": "strong",
+  "music_intensity_match": "aligned",
+  "expected_repeat_view_rate_pct": 21.6
+}

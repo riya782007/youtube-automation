@@ -1,0 +1,29 @@
+# Targets the LearningEngine compares against. If a video underperforms,
+# its hook/topic/structure fingerprint is down-weighted; if it overperforms,
+# it is amplified into future generations.
+
+targets:
+  short_form:
+    avg_view_duration_pct_min: 75
+    swipe_away_within_3s_pct_max: 22
+    likes_per_view_min: 0.06
+    comments_per_view_min: 0.012
+    repeat_view_rate_min: 0.18
+
+  daily_volume:
+    human_decoder: 3
+    ai_money_lab: 2
+    dramaverse: 3
+
+  monetization_path_60_90_days:
+    subs_required: 1000
+    watch_minutes_required_shorts_views: 10_000_000   # YouTube Shorts criterion
+    realistic_subs_month_1: [300, 3000]
+    realistic_subs_month_2: [1000, 10000]
+
+# Learning weights — how aggressively the system adapts to recent winners.
+learning:
+  decay_per_day: 0.97
+  recency_window_days: 14
+  min_samples_for_adoption: 5
+  amplification_factor_for_top_decile: 1.6

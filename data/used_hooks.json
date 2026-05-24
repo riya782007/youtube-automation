@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "description": "Every hook (first 0-2 sec line) ever produced. Embeddings used for cosine-similarity rejection at >0.55.",
+  "entries": []
+}

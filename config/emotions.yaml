@@ -1,0 +1,63 @@
+# Emotion → voice + pacing + visual behavior.
+# Used by EmotionEngine, VoiceEngine, AttentionResetEngine.
+
+emotions:
+
+  surprise:
+    voice: { speed: 1.15, pitch: 1.10 }
+    pause_ms: { sentence: 180, comma: 80, dramatic: 320 }
+    breath_probability: 0.10
+    visual: { reset_interval_sec: 1.8, shake: 0.6, flash: 0.4, zoom: 0.7 }
+    music_intensity: 0.85
+
+  romantic:
+    voice: { speed: 0.95, pitch: 1.00 }
+    pause_ms: { sentence: 260, comma: 120, dramatic: 500 }
+    breath_probability: 0.25
+    visual: { reset_interval_sec: 2.8, shake: 0.1, flash: 0.05, zoom: 0.5 }
+    music_intensity: 0.55
+
+  serious:
+    voice: { speed: 0.90, pitch: 0.96 }
+    pause_ms: { sentence: 280, comma: 140, dramatic: 600 }
+    breath_probability: 0.20
+    visual: { reset_interval_sec: 3.0, shake: 0.05, flash: 0.05, zoom: 0.4 }
+    music_intensity: 0.45
+
+  suspense:
+    voice: { speed: 0.85, pitch: 0.94 }
+    pause_ms: { sentence: 320, comma: 160, dramatic: 700 }
+    breath_probability: 0.30
+    visual: { reset_interval_sec: 2.4, shake: 0.3, flash: 0.2, zoom: 0.6 }
+    music_intensity: 0.65
+
+  excitement:
+    voice: { speed: 1.18, pitch: 1.08 }
+    pause_ms: { sentence: 150, comma: 60, dramatic: 280 }
+    breath_probability: 0.08
+    visual: { reset_interval_sec: 1.9, shake: 0.7, flash: 0.6, zoom: 0.8 }
+    music_intensity: 0.90
+
+  curiosity:
+    voice: { speed: 1.05, pitch: 1.04 }
+    pause_ms: { sentence: 220, comma: 100, dramatic: 420 }
+    breath_probability: 0.18
+    visual: { reset_interval_sec: 2.2, shake: 0.3, flash: 0.25, zoom: 0.6 }
+    music_intensity: 0.70
+
+  empathy:
+    voice: { speed: 0.93, pitch: 0.98 }
+    pause_ms: { sentence: 280, comma: 130, dramatic: 520 }
+    breath_probability: 0.30
+    visual: { reset_interval_sec: 2.7, shake: 0.10, flash: 0.05, zoom: 0.45 }
+    music_intensity: 0.50
+
+# Default markers injected into the spoken script.
+# Engines replace these with TTS provider syntax (SSML / Sarvam tags / EL pauses).
+markers:
+  pause_short:    "<<pause:short>>"
+  pause_medium:   "<<pause:medium>>"
+  pause_long:     "<<pause:long>>"
+  breath:         "<<breath>>"
+  emphasis_open:  "<<emph>>"
+  emphasis_close: "<</emph>>"
