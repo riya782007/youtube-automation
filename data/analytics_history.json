@@ -1,7 +1,68 @@
 {
   "schema_version": 1,
   "description": "Every published video's analytics snapshots. The LearningEngine reads from here.",
-  "videos": [],
+  "videos": [
+    {
+      "id": "human_decoder_20260526_130257_795a89",
+      "channel_id": "human_decoder",
+      "fingerprint": {
+        "hook": "Woh tumse baat kyun nahi kar rahe?",
+        "ending": "Tumhara message padh",
+        "topic": "texting behavior",
+        "structure": "hook|escalation|reveal|twist|loop"
+      },
+      "emotion": "curiosity",
+      "plan_summary": {
+        "channel_id": "human_decoder",
+        "title": "Ghost Kya Hai?",
+        "duration_sec": 12.81,
+        "emotion": "curiosity",
+        "hook_sentence": "Woh tumse baat kyun nahi kar rahe?",
+        "loop_sentence": "Tumhara message padh",
+        "asset_mix": {
+          "overlay": 0.11,
+          "stock": 0.44,
+          "ai_visual": 0.44
+        },
+        "avg_reset_interval": 1.83,
+        "sentence_count": 9,
+        "comment_trigger": "Type YES if ghosted",
+        "pinned_comment": "Tumhara message padh kar bhi",
+        "forbidden_hits": []
+      },
+      "first_seen_at": "2026-05-26T13:03:04.258742Z"
+    },
+    {
+      "id": "human_decoder_20260526_130359_27dbee",
+      "channel_id": "human_decoder",
+      "fingerprint": {
+        "hook": "She stopped replying suddenly...",
+        "ending": "Ab pata hai kya karna hai...",
+        "topic": "texting behavior",
+        "structure": "hook|escalation|reveal|twist|loop"
+      },
+      "emotion": "curiosity",
+      "plan_summary": {
+        "channel_id": "human_decoder",
+        "title": "Why she stops replying suddenly",
+        "duration_sec": 24.59,
+        "emotion": "curiosity",
+        "hook_sentence": "She stopped replying suddenly...",
+        "loop_sentence": "Ab pata hai kya karna hai...",
+        "asset_mix": {
+          "overlay": 0.18,
+          "stock": 0.45,
+          "ai_visual": 0.36
+        },
+        "avg_reset_interval": 2.05,
+        "sentence_count": 11,
+        "comment_trigger": "True or false?",
+        "pinned_comment": "Comment YES if this happened to you.",
+        "forbidden_hits": []
+      },
+      "first_seen_at": "2026-05-26T13:04:00.305189Z"
+    }
+  ],
   "winning_signals": {
     "hooks": [],
     "structures": [],
