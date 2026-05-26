@@ -1,7 +1,8 @@
-"""Unified LLM client. Claude primary (better Hinglish nuance), OpenAI fallback.
+"""Unified LLM client. Groq primary (fast + free tier), Claude/OpenAI fallback.
 
 Designed to degrade gracefully:
- - if both keys are missing, returns a deterministic mock response so the
+ - Groq (primary) → Claude → OpenAI → mock
+ - if all keys are missing, returns a deterministic mock response so the
    pipeline can still be wired and tested end-to-end without spend.
 """
 from __future__ import annotations
@@ -19,19 +20,34 @@ log = get_logger(__name__)
 @dataclass
 class LLMResponse:
     text: str
-    provider: str          # "anthropic" | "openai" | "mock"
+    provider: str          # "groq" | "anthropic" | "openai" | "mock"
     raw: Any = None
 
 
 class LLM:
     def __init__(self) -> None:
+        self.groq_key = os.getenv("GROQ_API_KEY", "").strip()
         self.anthropic_key = os.getenv("ANTHROPIC_API_KEY", "").strip()
         self.openai_key = os.getenv("OPENAI_API_KEY", "").strip()
+        self._groq = None
         self._anthropic = None
         self._openai = None
         self.dry_run = os.getenv("DRY_RUN", "false").lower() == "true"
 
     # ---- Provider lazy-init ------------------------------------------------
+    def _groq_client(self):
+        """Groq uses the OpenAI SDK with a custom base_url."""
+        if self._groq is None and self.groq_key:
+            try:
+                from openai import OpenAI
+                self._groq = OpenAI(
+                    api_key=self.groq_key,
+                    base_url="https://api.groq.com/openai/v1",
+                )
+            except Exception as e:
+                log.warning("Groq client init failed: %s", e)
+        return self._groq
+
     def _claude(self):
         if self._anthropic is None and self.anthropic_key:
             try:
@@ -60,10 +76,33 @@ class LLM:
         temperature: float = 0.7,
         json_mode: bool = False,
     ) -> LLMResponse:
-        """Single-turn completion. Tries Claude first, falls back to GPT, then mock."""
+        """Single-turn completion. Tries Groq first, then Claude, GPT, then mock."""
         if self.dry_run:
             return self._mock(system, user, json_mode)
 
+        # ---- 1. Groq (primary — fast + free tier) -------------------------
+        g = self._groq_client()
+        if g is not None:
+            try:
+                kwargs: dict[str, Any] = {
+                    "model": "llama-3.3-70b-versatile",
+                    "messages": [
+                        {"role": "system", "content": system},
+                        {"role": "user", "content": user},
+                    ],
+                    "max_tokens": max_tokens,
+                    "temperature": temperature,
+                }
+                if json_mode:
+                    kwargs["response_format"] = {"type": "json_object"}
+                resp = g.chat.completions.create(**kwargs)
+                text = resp.choices[0].message.content or ""
+                log.info("[llm] Groq response received (model=llama-3.3-70b-versatile)")
+                return LLMResponse(text=text, provider="groq", raw=resp)
+            except Exception as e:
+                log.warning("Groq failed (%s) — falling back to Claude", e)
+
+        # ---- 2. Claude (fallback) -----------------------------------------
         c = self._claude()
         if c is not None:
             try:
@@ -81,10 +120,11 @@ class LLM:
             except Exception as e:
                 log.warning("Claude failed (%s) — falling back to GPT", e)
 
-        g = self._gpt()
-        if g is not None:
+        # ---- 3. OpenAI (fallback) -----------------------------------------
+        gpt = self._gpt()
+        if gpt is not None:
             try:
-                kwargs: dict[str, Any] = {
+                kwargs2: dict[str, Any] = {
                     "model": "gpt-4o-mini",
                     "messages": [
                         {"role": "system", "content": system},
@@ -94,8 +134,8 @@ class LLM:
                     "temperature": temperature,
                 }
                 if json_mode:
-                    kwargs["response_format"] = {"type": "json_object"}
-                resp = g.chat.completions.create(**kwargs)
+                    kwargs2["response_format"] = {"type": "json_object"}
+                resp = gpt.chat.completions.create(**kwargs2)
                 return LLMResponse(
                     text=resp.choices[0].message.content or "",
                     provider="openai",
